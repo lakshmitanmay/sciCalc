@@ -1,0 +1,84 @@
+# Lab - 02
+### Implement the concept of class, data members, member functions and access specifiers(for your domain)
+```java
+import java.util.Scanner;
+
+class BasicCalc {
+    private double result;
+
+    public BasicCalc() {
+        this.result = 0.0;
+    }
+
+    public void add(double num1, double num2) {
+        this.result = num1 + num2;
+    }
+
+    public void subtract(double num1, double num2) {
+        this.result = num1 - num2;
+    }
+
+    public void multiply(double num1, double num2) {
+        this.result = num1 * num2;
+    }
+
+    public void divide(double num1, double num2) {
+        if (num2 != 0) {
+            this.result = num1 / num2;
+        } else {
+            System.out.println("Error: Division by zero is not allowed.");
+            this.result = Double.NaN;
+        }
+    }
+
+    public double getResult() {
+        return result;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        BasicCalc obj1 = new BasicCalc();
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+        do {
+            System.out.print("\nEnter first number: ");
+            double num1 = scanner.nextDouble();
+
+            System.out.print("Enter second number: ");
+            double num2 = scanner.nextDouble();
+
+            System.out.print("\n1. Add\n2. Subtract\n3. Multiply\n4. Divide\n5. Cancel\n6. Exit\nChoose an operation: ");
+            choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    obj1.add(num1, num2);
+                    System.out.println("Result: " + obj1.getResult());
+                    break;
+                case 2:
+                    obj1.subtract(num1, num2);
+                    System.out.println("Result: " + obj1.getResult());
+                    break;
+                case 3:
+                    obj1.multiply(num1, num2);
+                    System.out.println("Result: " + obj1.getResult());
+                    break;
+                case 4:
+                    obj1.divide(num1, num2);
+                    System.out.println("Result: " + obj1.getResult());
+                    break;
+                case 5:
+                    continue;
+                case 6:
+                    break;
+                default:
+                    System.out.println("Invalid choice!");
+            }
+        } while (choice != 6);
+
+        scanner.close();
+    }
+}
+
+```

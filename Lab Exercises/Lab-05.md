@@ -1,0 +1,237 @@
+# Lab-05
+### Write a Java program to implement the concept of package
+#### main.java
+
+```java
+import java.util.Scanner;
+
+import calc.basic.BasicCalc;
+import calc.advanced.AdvancedCalc;
+import Styling.format;
+
+public class Main {
+    public static void main(String[] args) {
+        double num1 = 0.0, num2 = 0.0;
+        int choice;
+        int calcCount = 0;
+
+
+        Scanner scanner = new Scanner(System.in);
+        BasicCalc[] calculations = new BasicCalc[100];
+
+        do {
+            System.out.print("\n\n" + format.cyanBackground + format.blackBold + "MAIN MENU" + format.reset + format.cyanBold + "\n1. Add\n2. Subtract\n3. Multiply\n4. Divide\n5. Power\n6. Square Root\n7. View History\n8. Clear History\n9. Exit\nChoose an operation: " + format.reset);
+            choice = scanner.nextInt();
+
+            if (choice >= 1 && choice < 6) {
+                System.out.print(format.greenBold + "\nEnter first number: ");
+                num1 = scanner.nextDouble();
+
+                System.out.print("Enter second number: " + format.reset);
+                num2 = scanner.nextDouble();
+            }
+
+            if (choice == 6) {
+                System.out.print(format.greenBold + "\nEnter the number: ");
+                num1 = scanner.nextDouble();
+            }
+
+            AdvancedCalc calc = new AdvancedCalc(num1, num2);
+
+            switch (choice) {
+                case 1:
+                    calc.add();
+                    System.out.println(format.whiteBackground + format.blackBold + "Result: " + calc.getResult() + format.reset);
+                    break;
+                case 2:
+                    calc.subtract();
+                    System.out.println(format.whiteBackground + format.blackBold + "Result: " + calc.getResult() + format.reset);
+                    break;
+                case 3:
+                    calc.multiply();
+                    System.out.println(format.whiteBackground + format.blackBold + "Result: " + calc.getResult() + format.reset);
+                    break;
+                case 4:
+                    calc.divide();
+                    System.out.println(format.whiteBackground + format.blackBold + "Result: " + calc.getResult() + format.reset);
+                    break;
+                case 5:
+                    calc.power();
+                    System.out.println(format.whiteBackground + format.blackBold + "Result: " + calc.getResult() + format.reset);
+                    break;
+                case 6:
+                    calc.sqrt();
+                    System.out.println(format.whiteBackground + format.blackBold + "Result: " + calc.getResult() + format.reset);
+                    break;
+                case 7:
+                    if (calcCount == 0) {
+                        System.out.println("\n" + format.redBackground + format.blackBold + "History is empty. Perform some calculations first." + format.reset);
+                    } else {
+                        System.out.println("\n" + format.purpleBackground + format.blackBold + "History" + format.reset);
+                        for (int i = 0; i < calcCount; i++) {
+                            System.out.println(format.purpleBold + (i + 1) + ". " + calculations[i].getNum1() + " " +
+                                    calculations[i].getOperator() + " " +
+                                    calculations[i].getNum2() + " = " +
+                                    calculations[i].getResult() + format.reset);
+                        }
+                    }
+                    break;
+                case 8:
+                    if (calcCount != 0) {
+                        for (int i = 0; i < calcCount; i++) {
+                            calculations[i] = null;
+                        }
+                        calcCount = 0;
+                        System.out.println("\n" + format.yellowBackground + format.blackBold + "History cleared" + format.reset);
+                    } else {
+                        System.out.println("\n" + format.redBackground + format.blackBold + "History is already empty" + format.reset);
+                    }
+                    break;
+                case 9:
+                    break;
+                default:
+                    System.out.println("\n" + format.redBackground + format.blackBold + "Invalid choice!" + format.reset);
+            }
+
+            if (choice >= 1 && choice <= 6 && calcCount < calculations.length) {
+                calculations[calcCount++] = calc;
+            }
+
+        } while (choice != 9);
+
+        scanner.close();
+    }
+}
+```
+#### calc -> Basic -> BasicCalc.java
+
+```java
+package calc.basic;
+
+public class BasicCalc {
+    protected double num1;
+    protected double num2;
+    protected double result;
+    protected char operator;
+
+    public BasicCalc(double num1, double num2) {
+        this.num1 = num1;
+        this.num2 = num2;
+        this.result = 0.0;
+        this.operator = ' ';
+    }
+
+    public BasicCalc() {
+        this(0.0, 0.0);
+    }
+
+    public void add() {
+        this.result = this.num1 + this.num2;
+        this.operator = '+';
+    }
+
+    public void subtract() {
+        this.result = this.num1 - this.num2;
+        this.operator = '-';
+    }
+
+    public void multiply() {
+        this.result = this.num1 * this.num2;
+        this.operator = '*';
+    }
+
+    public void divide() {
+        if (this.num2 != 0) {
+            this.result = this.num1 / this.num2;
+        } else {
+            System.out.println("Error: Division by zero is not allowed.");
+            this.result = Double.NaN;
+        }
+        this.operator = '/';
+    }
+
+    public double getNum1() {
+        return num1;
+    }
+
+    public double getNum2() {
+        return num2;
+    }
+
+    public double getResult() {
+        return result;
+    }
+
+    public char getOperator() {
+        return operator;
+    }
+}
+```
+#### calc -> Basic -> AdvancedCalc.java
+
+```java
+package calc.advanced;  
+  
+import calc.basic.BasicCalc;  
+  
+public class AdvancedCalc extends BasicCalc {  
+    public AdvancedCalc(double num1, double num2) {  
+        super(num1, num2);  
+    }  
+  
+    public void power() {  
+        this.result = Math.pow(this.num1, this.num2);  
+        this.operator = '^';  
+    }  
+  
+    public void sqrt() {  
+        this.result = Math.sqrt(this.num1);  
+        this.operator = '√';  
+    }  
+}
+```
+#### Styling -> format.java
+```java
+package Styling;  
+  
+public class format {  
+    // Reset  
+    public static final String reset = "\033[0m";  // Text Reset  
+  
+    // Regular Colors    public static final String black = "\033[0;30m";   // BLACK  
+    public static final String red = "\033[0;31m";     // RED  
+    public static final String green = "\033[0;32m";   // GREEN  
+    public static final String yellow = "\033[0;33m";  // YELLOW  
+    public static final String blue = "\033[0;34m";    // BLUE  
+    public static final String purple = "\033[0;35m";  // PURPLE  
+    public static final String cyan = "\033[0;36m";    // CYAN  
+    public static final String white = "\033[0;37m";   // WHITE  
+  
+    // Bold    public static final String bold = "\033[1m"; // ONLY BOLD  
+    public static final String blackBold = "\033[1;30m";  // BLACK  
+    public static final String redBold = "\033[1;31m";    // RED  
+    public static final String greenBold = "\033[1;32m";  // GREEN  
+    public static final String yellowBold = "\033[1;33m"; // YELLOW  
+    public static final String blueBold = "\033[1;34m";   // BLUE  
+    public static final String purpleBold = "\033[1;35m"; // PURPLE  
+    public static final String cyanBold = "\033[1;36m";   // CYAN  
+    public static final String whiteBold = "\033[1;97m";  // WHITE  
+  
+    // Background    public static final String blackBackground = "\033[40m";  // BLACK  
+    public static final String redBackground = "\033[41m";    // RED  
+    public static final String greenBackground = "\033[42m";  // GREEN  
+    public static final String yellowBackground = "\033[43m"; // YELLOW  
+    public static final String blueBackground = "\033[44m";   // BLUE  
+    public static final String purpleBackground = "\033[45m"; // PURPLE  
+    public static final String cyanBackground = "\033[46m";   // CYAN  
+    public static final String whiteBackground = "\033[107m";  // WHITE  
+}
+```
+
+#### output
+![[Pasted image 20250116174056.png|400]]
+![[Pasted image 20250116174124.png|400]]
+![[Pasted image 20250116174143.png|400]]
+![[Pasted image 20250116174155.png|400]]
+![[Pasted image 20250116174207.png|400]]
+![[Pasted image 20250116174222.png|400]]
